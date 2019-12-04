@@ -1,45 +1,32 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 
-import cg.algorithms.GrahamsScan;
-import cg.algorithms.utils.Point;
-import cg.progress.SceneProgress;
+import cg.algorithms.polygonsintersect.IntersectConvexPolygon;
+import cg.algorithms.polygonsintersect.Polygon;
+import cg.algorithms.utils.SceneProgress;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// Read Object
-		File file = new File(ClassLoader.getSystemClassLoader().getResource("test.obj").getFile());
+		File poly1File = new File(ClassLoader.getSystemClassLoader().getResource("poly1.obj").getFile());
+		File poly2File = new File(ClassLoader.getSystemClassLoader().getResource("poly2.obj").getFile());
 
-		ArrayList<Point> coordinates = new ArrayList<Point>();
-
+		Polygon polygon1 = null, polygon2 = null;
 		try {
-			String object = FileUtils.readFileToString(file, "UTF-8");
-			coordinates = Point.parseObj(object);
+			String poly1String = FileUtils.readFileToString(poly1File, "UTF-8");
+			String poly2String = FileUtils.readFileToString(poly2File, "UTF-8");
+			
+			polygon1 = new Polygon(poly1String);
+			polygon2 = new Polygon(poly2String);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-//		for (int i = 0; i < 25; i++) {
-//			int x = (int) (Math.random() * (450 - 50) + 50);
-//			int y = (int) (Math.random() * (450 - 50) + 50);
-//			coordinates.add(new Point(x, y));
-//		}
-//		for (int i = 0; i < 25; i++) {
-//			int x = (int) (Math.random() * (350 - 150) + 150);
-//			int y = (int) (Math.random() * (350 - 150) + 150);
-//			coordinates.add(new Point(x, y));
-//		}
-
-//		for (Point point : coordinates) {
-//			System.out.println("v " + point.x + " " + point.y);
-//		}
-
-		GrahamsScan gs = new GrahamsScan(coordinates);
-		SceneProgress sp = gs.process();
+		IntersectConvexPolygon icp = new IntersectConvexPolygon(polygon1, polygon2);
+		SceneProgress sp = icp.process();
 
 		try {
 			sp.saveContextToJson(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\output.json"));

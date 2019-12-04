@@ -1,12 +1,13 @@
-package cg.algorithms.utils;
+package cg.algorithms.polygonsintersect;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import cg.progress.DrawColor;
+import cg.algorithms.utils.DrawColor;
 
 public class Point {
 	public double x, y;
@@ -14,11 +15,29 @@ public class Point {
 	public double size = 6;
 	public String text = null;
 
+	public Polygon polygon;
+	public Point successor;
+	public Point predecessor;
+	public boolean isLeft = false;
+
+	public static Comparator<Point> comparator = new Comparator<Point>() {
+		public int compare(Point p1, Point p2) {
+			return ((p1.y > p2.y) ? -1 : 1);
+		}
+	};
+
 	public Point(double X, double Y) {
 		this.x = X;
 		this.y = Y;
 	}
-	
+
+	public Point(double X, double Y, DrawColor color, double size) {
+		this.x = X;
+		this.y = Y;
+		this.color = color;
+		this.size = size;
+	}
+
 	public Point(Point p) {
 		this.x = p.x;
 		this.y = p.y;
@@ -35,6 +54,16 @@ public class Point {
 		}
 	}
 
+	public Point next() {
+		if (isLeft) {
+			successor.isLeft = isLeft;
+			return successor;
+		} else {
+			predecessor.isLeft = isLeft;
+			return predecessor;
+		}
+	}
+
 	public static ArrayList<Point> parseObj(String obj) {
 		ArrayList<Point> result = new ArrayList<Point>();
 
@@ -47,7 +76,7 @@ public class Point {
 	}
 
 	public String toString() {
-		return "(" + String.valueOf(this.x) + "," + String.valueOf(this.y) + ")";
+		return "(" + String.valueOf((int) this.x) + ", " + String.valueOf((int) this.y) + ")";
 	}
 
 	public JsonObject toJsonObject() {

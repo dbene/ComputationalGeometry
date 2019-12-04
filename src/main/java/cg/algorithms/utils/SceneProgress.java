@@ -1,4 +1,4 @@
-package cg.progress;
+package cg.algorithms.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,14 +10,18 @@ import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.io.FileUtils;
 
-public class SceneProgress {
-	LinkedList<Scene> progress = new LinkedList<Scene>();
+public abstract class SceneProgress {
+	LinkedList<SceneInterface> progress = null;
 
-	public void addScene(Scene scene) {
+	public <T extends SceneInterface> SceneProgress(LinkedList<T> progressList) {
+		this.progress = (LinkedList<SceneInterface>) progressList;
+	}
+
+	public void addScene(SceneInterface scene) {
 		addScene(scene, false);
 	}
 
-	public void addScene(Scene scene, boolean force) {
+	public void addScene(SceneInterface scene, boolean force) {
 		if (force || progress.isEmpty() || !progress.getLast().equals(scene)) {
 			progress.add(scene);
 		}
@@ -27,7 +31,7 @@ public class SceneProgress {
 		JsonObjectBuilder json = Json.createObjectBuilder();
 
 		JsonArrayBuilder scenes = Json.createArrayBuilder();
-		for (Scene scene : this.progress) {
+		for (SceneInterface scene : this.progress) {
 			scenes.add(scene.toJsonObject());
 		}
 

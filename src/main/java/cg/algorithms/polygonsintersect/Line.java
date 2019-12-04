@@ -1,10 +1,10 @@
-package cg.algorithms.utils;
+package cg.algorithms.polygonsintersect;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import cg.progress.DrawColor;
+import cg.algorithms.utils.DrawColor;
 
 public class Line {
 	public Point p1, p2;
@@ -49,5 +49,9 @@ public class Line {
 
 		Line l = (Line) o;
 		return this.p1.equals(l.p1) && this.p2.equals(l.p2);
+	}
+
+	public String toString() {
+		return "[" + this.p1 + ", " + this.p2 + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package cg.progress;
+package cg.algorithms.polygonsintersect;
 
 import java.util.ArrayList;
 
@@ -7,10 +7,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import cg.algorithms.utils.Line;
-import cg.algorithms.utils.Point;
+import cg.algorithms.utils.SceneInterface;
 
-public class Scene {
+public class Scene implements SceneInterface {
 	public ArrayList<Point> points;
 	public ArrayList<Line> lines;
 
@@ -41,7 +40,7 @@ public class Scene {
 
 		return json.build();
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -53,14 +52,14 @@ public class Scene {
 		}
 
 		Scene scene = (Scene) o;
-		
-		if(!this.points.equals(scene.points)) {
+
+		if (!this.points.equals(scene.points)) {
 			return false;
 		}
-		if(!this.lines.equals(scene.lines)) {
+		if (!this.lines.equals(scene.lines)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 }

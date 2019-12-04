@@ -1,14 +1,10 @@
-package cg.algorithms;
+package cg.algorithms.grahamsscan;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import cg.algorithms.utils.Line;
-import cg.algorithms.utils.Point;
-import cg.progress.DrawColor;
-import cg.progress.Scene;
-import cg.progress.SceneProgress;
+import cg.algorithms.utils.DrawColor;
 
 public class GrahamsScan {
 	private ArrayList<Point> points;
