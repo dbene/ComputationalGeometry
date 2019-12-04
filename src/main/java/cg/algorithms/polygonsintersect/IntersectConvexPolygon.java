@@ -150,19 +150,19 @@ public class IntersectConvexPolygon {
 		ArrayList<Point> points = new ArrayList<Point>();
 
 		for (Point point : this.p1.points) {
-			Point p = new Point(point.x, point.y, new DrawColor(255, 0, 0), 10);
-			p.text = point.toString();
+			Point p = new Point(point.x, point.y, new DrawColor(0, 0, 0), 10);
+//			p.text = point.toString();
 			points.add(p);
 		}
 
 		for (Point point : this.p2.points) {
-			Point p = new Point(point.x, point.y, new DrawColor(255, 0, 0), 10);
-			p.text = point.toString();
+			Point p = new Point(point.x, point.y, new DrawColor(0, 0, 0), 10);
+//			p.text = point.toString();
 			points.add(p);
 		}
 
 		for (Point point : interPoints) {
-			Point p = new Point(point.x, point.y, new DrawColor(0, 0, 255), 10);
+			Point p = new Point(point.x, point.y, new DrawColor(255, 0, 0), 10);
 			p.text = point.toString();
 			points.add(p);
 		}
