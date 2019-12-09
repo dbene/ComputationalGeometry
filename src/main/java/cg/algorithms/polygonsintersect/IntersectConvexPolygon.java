@@ -17,7 +17,9 @@ public class IntersectConvexPolygon {
 
 	public SceneProgress process() {
 		SceneProgress sp = new SceneProgress();
-		addScene(sp, null, null, null, null, new HashSet<Point>());
+
+		// Initial state
+		addScene(sp, null, null, null, null, new HashSet<Point>(), null);
 
 		// Sort points of polgons by Y
 		LinkedList<Point> p1List = sortPolygonPoints(new LinkedList<Point>(Arrays.asList(p1.points)));
@@ -92,11 +94,15 @@ public class IntersectConvexPolygon {
 			result.addAll(intersectAll(leftP1, rightP1, leftP2, rightP2));
 
 			// Save scene
-			addScene(sp, leftP1, rightP1, leftP2, rightP2, result);
+			addScene(sp, leftP1, rightP1, leftP2, rightP2, result, Q);
 
 			// Remove first element
 			Q.removeFirst();
 		}
+
+		// Final scene
+		System.out.println(Q.size());
+		addScene(sp, leftP1, rightP1, leftP2, rightP2, result, null);
 
 		return sp;
 	}
@@ -145,26 +151,49 @@ public class IntersectConvexPolygon {
 		return new Point(x, y);
 	}
 
-	private void addScene(SceneProgress sp, Line p1L, Line p1R, Line p2L, Line p2R, HashSet<Point> interPoints) {
+	private void addScene(SceneProgress sp, Line p1L, Line p1R, Line p2L, Line p2R, HashSet<Point> interPoints,
+			LinkedList<Point> Q) {
 		ArrayList<Line> lines = new ArrayList<Line>();
 		ArrayList<Point> points = new ArrayList<Point>();
 
 		for (Point point : this.p1.points) {
-			Point p = new Point(point.x, point.y, new DrawColor(0, 0, 0), 10);
-//			p.text = point.toString();
-			points.add(p);
+			if (Q == null || !Q.contains(point)) {
+				Point p = new Point(point.x, point.y, new DrawColor(128, 128, 128), 10);
+				points.add(p);
+			}
 		}
 
 		for (Point point : this.p2.points) {
-			Point p = new Point(point.x, point.y, new DrawColor(0, 0, 0), 10);
-//			p.text = point.toString();
-			points.add(p);
+			if (Q == null || !Q.contains(point)) {
+				Point p = new Point(point.x, point.y, new DrawColor(128, 128, 128), 10);
+				points.add(p);
+			}
 		}
 
 		for (Point point : interPoints) {
 			Point p = new Point(point.x, point.y, new DrawColor(255, 0, 0), 10);
 			p.text = point.toString();
 			points.add(p);
+		}
+
+		if (Q != null) {
+			for (Point point : Q) {
+				Point p = new Point(point.x, point.y, new DrawColor(0, 0, 0), 10);
+				points.add(p);
+			}
+
+			// Progress line
+			double maxX = Double.MIN_VALUE, minX = Double.MAX_VALUE;
+			double y = Q.getFirst().y;
+
+			for (Point point : points) {
+				if (point.x > maxX)
+					maxX = point.x;
+				if (point.x < minX)
+					minX = point.x;
+			}
+
+			lines.add(new Line(new Point(minX - 50, y), new Point(maxX + 50, y), 255 - 32, 0, 0, 2));
 		}
 
 		Point first = this.p1.points[0];
