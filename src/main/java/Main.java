@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Read Object
-		File quad = new File(ClassLoader.getSystemClassLoader().getResource("quad_1.obj").getFile());
+		File quad = new File(ClassLoader.getSystemClassLoader().getResource("quad_2.obj").getFile());
 
 		QuadTree qt = null;
 		try {
@@ -22,13 +22,9 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-		SceneProgress sp = qt.process();
-
-		try {
-			sp.saveContextToJson(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\output.json"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		qt.process();
+		
+		qt.saveToJSON(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\test.json"));
 	}
 
 	public static void test() {

@@ -1,11 +1,20 @@
 package cg.algorithms.quadtrees;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
-import cg.algorithms.utils.DrawColor;
+import org.apache.commons.io.FileUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class QuadTree {
 	ArrayList<Point> points = new ArrayList<Point>();
+	QTNode rootNode;
 
 	public QuadTree(String obj) {
 		String[] objLines = obj.split(System.getProperty("line.separator"));
@@ -14,45 +23,69 @@ public class QuadTree {
 			Point point = new Point(objLines[i]);
 			points.add(point);
 		}
+
+		rootNode = new QTNode(null, 0, 500, 0, 500);
 	}
 
-	public SceneProgress process() {
-		SceneProgress sp = new SceneProgress();
-		addScene(sp, points, null);
-		
-		
+	public void process() {
+		test(rootNode, this.points);
 
-		return sp;
+		rootNode.calcNeighbors();
 	}
 
-	private void addScene(SceneProgress sp, ArrayList<Point> points, ArrayList<Line> lines) {
-		ArrayList<Point> drawPoints = new ArrayList<Point>();
-		ArrayList<Line> drawLines = new ArrayList<Line>();
-
-		if (points != null) {
-			drawPoints.addAll(points);
+	public void saveToJSON(File file) {
+		ArrayList<QTNode> cache = new ArrayList<QTNode>();
+		cache.addAll(IdCounter.getInstance().getNodes());		
+		Collections.sort(cache);
+		
+		JsonObject json = new JsonObject();
+		JsonArray arrNodes = new JsonArray();
+		
+		for (QTNode node : cache) {
+			arrNodes.add(node.toJsonObject());
 		}
 
-		if (lines != null) {
-			drawLines.addAll(lines);
+		json.add("nodes", arrNodes);
+		json.add("map", rootNode.toJsonMapObject());
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String prettyJson = gson.toJson(json);
+
+		try {
+			FileUtils.writeStringToFile(file, prettyJson, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
 
-		Point edge1 = new Point(0, 0, new DrawColor(0, 0, 0), 0);
-		Point edge2 = new Point(0, 500, new DrawColor(0, 0, 0), 0);
-		Point edge3 = new Point(500, 500, new DrawColor(0, 0, 0), 0);
-		Point edge4 = new Point(500, 0, new DrawColor(0, 0, 0), 0);
+	private void test(QTNode node, ArrayList<Point> points) {
+		if (points.size() == 0) {
 
-		drawPoints.add(edge1);
-		drawPoints.add(edge2);
-		drawPoints.add(edge3);
-		drawPoints.add(edge4);
+		} else if (points.size() == 1) {
+			node.point = points.get(0);
+		} else if (points.size() > 1) {
+			node.split();
 
-		drawLines.add(new Line(edge1, edge2, 0, 0, 0, 3));
-		drawLines.add(new Line(edge2, edge3, 0, 0, 0, 3));
-		drawLines.add(new Line(edge3, edge4, 0, 0, 0, 3));
-		drawLines.add(new Line(edge4, edge1, 0, 0, 0, 3));
+			ArrayList<Point> nePoints = new ArrayList<Point>();
+			ArrayList<Point> nwPoints = new ArrayList<Point>();
+			ArrayList<Point> swPoints = new ArrayList<Point>();
+			ArrayList<Point> sePoints = new ArrayList<Point>();
 
-		Scene scene = new Scene(drawPoints, drawLines);
-		sp.addScene(scene);
+			for (Point point : points) {
+				if (node.ne.checkPoint(point, DIRECTION.NORTHEAST))
+					nePoints.add(point);
+				if (node.nw.checkPoint(point, DIRECTION.NORTHWEST))
+					nwPoints.add(point);
+				if (node.sw.checkPoint(point, DIRECTION.SOUTHWEST))
+					swPoints.add(point);
+				if (node.se.checkPoint(point, DIRECTION.SOUTHEAST))
+					sePoints.add(point);
+			}
+
+			test(node.ne, nePoints);
+			test(node.nw, nwPoints);
+			test(node.sw, swPoints);
+			test(node.se, sePoints);
+		}
 	}
 }

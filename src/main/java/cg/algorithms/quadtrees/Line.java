@@ -1,10 +1,6 @@
 package cg.algorithms.quadtrees;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
-import cg.algorithms.utils.DrawColor;
+import com.google.gson.JsonObject;
 
 public class Line {
 	public Point p1, p2;
@@ -35,13 +31,13 @@ public class Line {
 	}
 
 	public JsonObject toJsonObject() {
-		JsonObjectBuilder line = Json.createObjectBuilder();
+		JsonObject line = new JsonObject();
 		line.add("p1", p1.toJsonObject());
 		line.add("p2", p2.toJsonObject());
 		line.add("color", color.toJsonObject());
-		line.add("width", width);
+		line.addProperty("width", width);
 
-		return line.build();
+		return line;
 	}
 
 	@Override

@@ -2,11 +2,8 @@ package cg.algorithms.quadtrees;
 
 import java.util.ArrayList;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import com.google.gson.JsonObject;
 
-import cg.algorithms.utils.DrawColor;
 
 public class Point {
 	public double x, y;
@@ -58,20 +55,20 @@ public class Point {
 	}
 
 	public JsonObject toJsonObject() {
-		JsonObjectBuilder json = Json.createObjectBuilder();
+		JsonObject json = new JsonObject();
 
-		json.add("x", this.x);
-		json.add("y", this.y);
-		json.add("size", this.size);
-		if (this.color == null)
-			this.color = new DrawColor(255, 0, 0);
-		json.add("color", this.color.toJsonObject());
+		json.addProperty("x", this.x);
+		json.addProperty("y", this.y);
+//		json.addProperty("size", this.size);
+//		if (this.color == null)
+//			this.color = new DrawColor(255, 0, 0);
+//		json.add("color", this.color.toJsonObject());
+//
+//		if (this.text != null) {
+//			json.addProperty("text", this.text);
+//		}
 
-		if (this.text != null) {
-			json.add("text", this.text);
-		}
-
-		return json.build();
+		return json;
 	}
 
 	@Override
