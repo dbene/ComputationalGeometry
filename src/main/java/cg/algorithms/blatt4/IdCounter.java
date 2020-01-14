@@ -1,15 +1,15 @@
-package cg.algorithms.bsptrees;
+package cg.algorithms.blatt4;
 
 import java.util.HashSet;
 
 public class IdCounter {
 	private static IdCounter instance;
 	private int counter;
-	private HashSet<BSPNode> nodes;
+	private HashSet<PointNode> nodes;
 
 	private IdCounter(int id) {
 		this.counter = id;
-		this.nodes = new HashSet<BSPNode>();
+		this.nodes = new HashSet<PointNode>();
 	}
 
 	public static IdCounter getInstance() {
@@ -19,13 +19,13 @@ public class IdCounter {
 		return IdCounter.instance;
 	}
 
-	public int getNextInt(BSPNode node) {
+	public int getNextInt(PointNode node) {
 		nodes.add(node);
 		this.counter++;
 		return this.counter;
 	}
 	
-	public HashSet<BSPNode> getNodes(){
+	public HashSet<PointNode> getNodes(){
 		return this.nodes;
 	}
 }

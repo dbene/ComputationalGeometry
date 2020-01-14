@@ -1,4 +1,4 @@
-package cg.algorithms.bsptrees;
+package cg.algorithms.blatt4;
 
 import com.google.gson.JsonObject;
 
