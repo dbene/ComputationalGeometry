@@ -59,16 +59,10 @@ public class Point {
 
 		json.addProperty("x", this.x);
 		json.addProperty("y", this.y);
-//		json.addProperty("size", this.size);
 		if (this.color == null) {
 			this.color = new DrawColor(0, 0, 255);
-			System.out.println(this);
 		}
 		json.add("color", this.color.toJsonObject());
-//
-//		if (this.text != null) {
-//			json.addProperty("text", this.text);
-//		}
 
 		return json;
 	}
