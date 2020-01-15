@@ -75,9 +75,9 @@ public class GrahamsScan {
 
 		addFinalScene(result, points, convexHull);
 
-		for (Point point : convexHull) {
-			System.out.println(point);
-		}
+//		for (Point point : convexHull) {
+//			System.out.println(point);
+//		}
 
 		return result;
 	}

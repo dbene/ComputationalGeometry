@@ -101,7 +101,6 @@ public class IntersectConvexPolygon {
 		}
 
 		// Final scene
-		System.out.println(Q.size());
 		addScene(sp, leftP1, rightP1, leftP2, rightP2, result, null);
 
 		return sp;
@@ -110,10 +109,10 @@ public class IntersectConvexPolygon {
 	public ArrayList<Point> intersectAll(Line line1, Line line2, Line line3, Line line4) {
 		ArrayList<Point> result = new ArrayList<Point>();
 
-		Point test1 = intersectNEW(line1, line3);
-		Point test2 = intersectNEW(line1, line4);
-		Point test3 = intersectNEW(line2, line3);
-		Point test4 = intersectNEW(line2, line4);
+		Point test1 = intersect(line1, line3);
+		Point test2 = intersect(line1, line4);
+		Point test3 = intersect(line2, line3);
+		Point test4 = intersect(line2, line4);
 
 		if (test1 != null)
 			result.add(test1);
@@ -127,7 +126,8 @@ public class IntersectConvexPolygon {
 		return result;
 	}
 
-	public Point intersect(Line line1, Line line2) {
+	@Deprecated
+	public Point intersectGradient(Line line1, Line line2) {
 		if (line1 == null || line2 == null)
 			return null;
 
@@ -151,7 +151,15 @@ public class IntersectConvexPolygon {
 		return new Point(x, y);
 	}
 
-	public Point intersectNEW(Line line1, Line line2) {
+	/**
+	 * Return the intersection of two line segments
+	 * {@link http://www.cs.swan.ac.uk/~cssimon/line_intersection.html}
+	 * 
+	 * @param line1
+	 * @param line2
+	 * @return Point of intersection or null if there is none
+	 */
+	public Point intersect(Line line1, Line line2) {
 		if (line1 == null || line2 == null)
 			return null;
 		
