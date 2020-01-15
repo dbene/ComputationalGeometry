@@ -110,10 +110,10 @@ public class IntersectConvexPolygon {
 	public ArrayList<Point> intersectAll(Line line1, Line line2, Line line3, Line line4) {
 		ArrayList<Point> result = new ArrayList<Point>();
 
-		Point test1 = intersect(line1, line3);
-		Point test2 = intersect(line1, line4);
-		Point test3 = intersect(line2, line3);
-		Point test4 = intersect(line2, line4);
+		Point test1 = intersectNEW(line1, line3);
+		Point test2 = intersectNEW(line1, line4);
+		Point test3 = intersectNEW(line2, line3);
+		Point test4 = intersectNEW(line2, line4);
 
 		if (test1 != null)
 			result.add(test1);
@@ -149,6 +149,42 @@ public class IntersectConvexPolygon {
 			return null;
 
 		return new Point(x, y);
+	}
+
+	public Point intersectNEW(Line line1, Line line2) {
+		if (line1 == null || line2 == null)
+			return null;
+		
+		double x1 = line1.p1.x;
+		double x2 = line1.p2.x;
+		double x3 = line2.p1.x;
+		double x4 = line2.p2.x;
+
+		double y1 = line1.p1.y;
+		double y2 = line1.p2.y;
+		double y3 = line2.p1.y;
+		double y4 = line2.p2.y;
+
+		float tA = (float) ((
+					(y3 - y4) * (x1 - x3) + (x4 - x3) * (y1 - y3)
+				) / (
+					(x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3))
+				);
+
+		float tB = (float) ((
+					(y1 - y2) * (x1 - x3) + (x2 - x1) * (y1 - y3)
+				) / (
+					(x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3)
+				));
+
+		if (0 <= tA && tA <= 1 && 0 <= tB && tB <= 1) {
+			double pX = x1 + tA * (x2 - x1);
+			double pY = y1 + tA * (y2 - y1);
+
+			return new Point(pX, pY);
+		}
+
+		return null;
 	}
 
 	private void addScene(SceneProgress sp, Line p1L, Line p1R, Line p2L, Line p2R, HashSet<Point> interPoints,
