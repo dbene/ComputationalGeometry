@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 public class Point {
 	public double x, y;
-	public DrawColor color;
+	public DrawColor color = new DrawColor(255, 0, 0);
 	public double size = 6;
 	public String text = null;
 
@@ -60,9 +60,11 @@ public class Point {
 		json.addProperty("x", this.x);
 		json.addProperty("y", this.y);
 //		json.addProperty("size", this.size);
-//		if (this.color == null)
-//			this.color = new DrawColor(255, 0, 0);
-//		json.add("color", this.color.toJsonObject());
+		if (this.color == null) {
+			this.color = new DrawColor(0, 0, 255);
+			System.out.println(this);
+		}
+		json.add("color", this.color.toJsonObject());
 //
 //		if (this.text != null) {
 //			json.addProperty("text", this.text);

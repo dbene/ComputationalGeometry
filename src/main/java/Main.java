@@ -12,7 +12,7 @@ import cg.algorithms.utils.SceneProgress;
 public class Main {
 
 	public static void main(String[] args) {
-		blatt4();
+		blatt3();
 	}
 
 	public static void blatt4() {
@@ -31,12 +31,12 @@ public class Main {
 
 		d2t.process();
 
-		d2t.saveToJSON(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\test_blatt4.json"));
+		d2t.saveToJSON(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\ComputationalGeometryDrawer\\data\\test_blatt4.json"));
 	}
 
 	public static void blatt3() {
 		// Read Object
-		File quad = new File(ClassLoader.getSystemClassLoader().getResource("quad_2.obj").getFile());
+		File quad = new File(ClassLoader.getSystemClassLoader().getResource("UB2_T3.obj").getFile());
 
 		QuadTree qt = null;
 		try {
@@ -48,7 +48,7 @@ public class Main {
 
 		qt.process();
 
-		qt.saveToJSON(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\blatt3.json"));
+		qt.saveToJSON(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\ComputationalGeometryDrawer\\data\\blatt3.json"));
 	}
 
 	public static void blatt2() {
@@ -71,7 +71,7 @@ public class Main {
 		SceneProgress sp = icp.process();
 
 		try {
-			sp.saveContextToJson(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer\\data\\blatt2.json"));
+			sp.saveContextToJson(new File("C:\\Users\\dasbene\\Desktop\\drawer_dev\\ComputationalGeometryDrawer\\data\\blatt2.json"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -10,14 +10,11 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import cg.algorithms.quadtrees.IdCounter;
-import cg.algorithms.quadtrees.QTNode;
 
 public class D2Tree {
 	ArrayList<Point> points = new ArrayList<Point>();
+	Box searchRange = null;
 	PointNode rootNode;
 
 	public D2Tree(String obj, String range) {
@@ -27,12 +24,66 @@ public class D2Tree {
 			Point point = new Point(objLines[i]);
 			points.add(point);
 		}
+
+		String[] objRange = range.split(System.getProperty("line.separator"));
+		double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE, minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
+
+		for (int i = 0; i < objRange.length; i++) {
+			String[] parts = objRange[i].split(" ");
+			if (parts[0].contentEquals("v") && parts.length == 3) {
+				if (minX > Double.parseDouble(parts[1]))
+					minX = Double.parseDouble(parts[1]);
+				if (maxX < Double.parseDouble(parts[1]))
+					maxX = Double.parseDouble(parts[1]);
+
+				if (minY > Double.parseDouble(parts[2]))
+					minY = Double.parseDouble(parts[2]);
+				if (maxY < Double.parseDouble(parts[2]))
+					maxY = Double.parseDouble(parts[2]);
+			}
+		}
+
+		this.searchRange = new Box(minX, maxX, minY, maxY);
 	}
 
 	public void process() {
 		this.rootNode = build(null, DIMENSION.Y, this.points, new Box(0, 500, 0, 500));
 
+		rangeSearch(this.rootNode, this.rootNode.dimension, this.searchRange);
+
 		this.rootNode.printTreeNode(0);
+	}
+
+	public void rangeSearch(PointNode node, DIMENSION d, Box range) {
+		if (node != null) {
+			double l, r, coord;
+
+			if (d == DIMENSION.Y) {
+				l = range.maxY;
+				r = range.minY;
+				coord = node.point.y;
+			} else {
+				l = range.maxX;
+				r = range.minX;
+				coord = node.point.x;
+			}
+
+			node.point.color = new DrawColor(255, 0, 0);
+
+			if (l > coord) {
+				node.point.color = new DrawColor(255, 255, 0);
+				rangeSearch(node.leftChild, getNextDIMENSION(d), range);
+			}
+
+			if (coord < r) {
+				node.point.color = new DrawColor(255, 255, 0);
+				rangeSearch(node.rightChild, getNextDIMENSION(d), range);
+			}
+
+			if (range.contains(node.point)) {
+				node.point.color = new DrawColor(0, 255, 0);
+			}
+		}
 	}
 
 	private PointNode build(PointNode parent, DIMENSION d, ArrayList<Point> points, Box box) {
@@ -84,7 +135,8 @@ public class D2Tree {
 	public void saveToJSON(File file) {
 		JsonObject json = new JsonObject();
 
-		json.add("map", rootNode.toJsonObject());
+		json.add("map", this.rootNode.toJsonObject());
+		json.add("range", this.searchRange.toJsonObject());
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String prettyJson = gson.toJson(json);
