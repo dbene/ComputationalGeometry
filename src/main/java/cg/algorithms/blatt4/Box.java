@@ -1,5 +1,7 @@
 package cg.algorithms.blatt4;
 
+import com.google.gson.JsonObject;
+
 public class Box {
 	public double minX, maxX, minY, maxY;
 
@@ -38,5 +40,20 @@ public class Box {
 
 	public boolean contains(Point p) {
 		return this.minX <= p.x && this.maxX >= p.x && this.minY <= p.y && this.maxY >= p.y;
+	}
+	
+	public String toJsonString() {
+		return toJsonObject().toString();
+	}
+
+	public JsonObject toJsonObject() {
+		JsonObject json = new JsonObject();
+
+		json.addProperty("minX", this.minX);
+		json.addProperty("maxX", this.maxX);
+		json.addProperty("minY", this.minY);
+		json.addProperty("maxY", this.maxY);
+
+		return json;
 	}
 }

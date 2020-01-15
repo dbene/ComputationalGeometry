@@ -41,6 +41,7 @@ public class PointNode {
 
 		json.addProperty("dimension", this.dimension.toString());
 		json.add("point", this.point.toJsonObject());
+		json.add("box", this.box.toJsonObject());
 
 		if (rightChild != null)
 			json.add("right", rightChild.toJsonObject());

@@ -12,7 +12,7 @@ import cg.algorithms.utils.SceneProgress;
 public class Main {
 
 	public static void main(String[] args) {
-		blatt2();
+		blatt4();
 	}
 
 	public static void blatt4() {
