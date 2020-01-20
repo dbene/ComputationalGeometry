@@ -59,18 +59,18 @@ public class D2Tree {
 			double l, r, coord;
 
 			if (d == DIMENSION.Y) {
-				l = range.maxY;
-				r = range.minY;
+				r = range.maxY;
+				l = range.minY;
 				coord = node.point.y;
 			} else {
-				l = range.maxX;
-				r = range.minX;
+				r = range.maxX;
+				l = range.minX;
 				coord = node.point.x;
 			}
 
 			node.point.color = new DrawColor(255, 0, 0);
 
-			if (l > coord) {
+			if (l < coord) {
 				node.point.color = new DrawColor(255, 255, 0);
 				rangeSearch(node.leftChild, getNextDIMENSION(d), range);
 			}
