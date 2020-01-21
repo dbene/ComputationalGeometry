@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 
@@ -24,6 +26,11 @@ public class D2Tree {
 			Point point = new Point(objLines[i]);
 			points.add(point);
 		}
+
+//		Random r = new Random();
+//		for (int i = 0; i < 32; i++) {
+//			points.add(new Point(r.nextInt((490 - 10) + 1) + 10, r.nextInt((490 - 10) + 1) + 10));
+//		}
 
 		String[] objRange = range.split(System.getProperty("line.separator"));
 		double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE, minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
@@ -48,7 +55,7 @@ public class D2Tree {
 
 	public void process() {
 		this.rootNode = build(null, DIMENSION.Y, this.points, new Box(0, 500, 0, 500));
-
+		
 		rangeSearch(this.rootNode, this.rootNode.dimension, this.searchRange);
 
 		this.rootNode.printTreeNode(0);
