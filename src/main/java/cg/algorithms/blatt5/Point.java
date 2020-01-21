@@ -15,6 +15,8 @@ public class Point {
 	public Point successor;
 	public Point predecessor;
 
+	public CLASSIFICATION classification;
+
 	public static Comparator<Point> comparator = new Comparator<Point>() {
 		public int compare(Point p1, Point p2) {
 			return ((p1.y > p2.y) ? -1 : 1);
@@ -74,9 +76,7 @@ public class Point {
 			this.color = new DrawColor(255, 0, 0);
 		json.add("color", this.color.toJsonObject());
 
-		if (this.text != null) {
-			json.addProperty("text", this.text);
-		}
+		json.addProperty("text", this.classification.getValue());
 
 		return json;
 	}
@@ -93,5 +93,19 @@ public class Point {
 
 		Point p = (Point) o;
 		return this.x == p.x && this.y == p.y;
+	}
+
+	public enum CLASSIFICATION {
+		START("START"), END("END"), REGULAR("REGULAR"), SPLIT("SPLIT"), MERGE("MERGE");
+
+		private String value;
+
+		CLASSIFICATION(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
 	}
 }
