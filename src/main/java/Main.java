@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
 import cg.algorithms.blatt4.D2Tree;
+import cg.algorithms.blatt5.ArtGallery;
 import cg.algorithms.grahamsscan.GrahamsScan;
 import cg.algorithms.grahamsscan.Point;
 import cg.algorithms.polygonsintersect.IntersectConvexPolygon;
@@ -23,6 +24,7 @@ public class Main {
 		blatt2(drawerPath);
 		blatt3(drawerPath);
 		blatt4(drawerPath);
+		blatt5(drawerPath);
 	}
 
 	public static void blatt1(Path drawerPath) {
@@ -111,8 +113,25 @@ public class Main {
 		}
 
 		d2t.process();
-		
+
 		d2t.saveToJSON(Paths.get(drawerPath.toString(), "algorithms", "blatt4", "data", "test_blatt4.json").toFile());
+	}
+
+	public static void blatt5(Path drawerPath) {
+		// Read Object
+		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5/UB5_T1.obj").getFile());
+
+		ArtGallery ag = null;
+		try {
+			String pointsString = FileUtils.readFileToString(polygon, "UTF-8");
+			ag = new ArtGallery(pointsString);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		ag.process();
+
+		ag.saveToJSON(Paths.get(drawerPath.toString(), "algorithms", "blatt5", "data", "blatt5.json").toFile());
 	}
 
 }
