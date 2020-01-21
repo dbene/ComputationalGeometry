@@ -14,6 +14,8 @@ public class Point {
 	public Polygon polygon;
 	public Point successor;
 	public Point predecessor;
+	
+	public boolean left;
 
 	public CLASSIFICATION classification;
 
@@ -76,7 +78,7 @@ public class Point {
 			this.color = new DrawColor(255, 0, 0);
 		json.add("color", this.color.toJsonObject());
 
-		json.addProperty("text", this.classification.getValue());
+		json.addProperty("text", this.left);
 
 		return json;
 	}

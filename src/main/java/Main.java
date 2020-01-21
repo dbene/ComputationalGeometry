@@ -20,10 +20,10 @@ public class Main {
 	public static void main(String[] args) {
 		Path drawerPath = Paths.get("C:\\Users\\dasbene\\Desktop\\drawer_dev\\cg_drawer");
 
-		blatt1(drawerPath);
-		blatt2(drawerPath);
-		blatt3(drawerPath);
-		blatt4(drawerPath);
+//		blatt1(drawerPath);
+//		blatt2(drawerPath);
+//		blatt3(drawerPath);
+//		blatt4(drawerPath);
 		blatt5(drawerPath);
 	}
 
@@ -119,7 +119,7 @@ public class Main {
 
 	public static void blatt5(Path drawerPath) {
 		// Read Object
-		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5/UB5_T1.obj").getFile());	// "blatt5/UB5_T1.obj"
+		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5_monoton.obj").getFile());	// "blatt5/UB5_T1.obj"
 
 		ArtGallery ag = null;
 		try {

@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 public class Polygon {
 	LinkedList<Point> points = new LinkedList<Point>();
+	LinkedList<Line> triangleLines = new LinkedList<Line>();
 
 	public Polygon(String obj) {
 		String[] objLines = obj.split(System.getProperty("line.separator"));
@@ -54,7 +55,13 @@ public class Polygon {
 			lineArr.add(new Line(point, point.successor).toJsonObject());
 		}
 		json.add("points", pointArr);
-		json.add("lines", lineArr);
+		json.add("lines", lineArr);		
+
+		JsonArray triLineArr = new JsonArray();
+		for (Line line : this.triangleLines) {
+			triLineArr.add(line.toJsonObject());
+		}
+		json.add("triLines", triLineArr);	
 
 		return json;
 	}
