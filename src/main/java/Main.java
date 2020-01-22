@@ -119,7 +119,7 @@ public class Main {
 
 	public static void blatt5(Path drawerPath) {
 		// Read Object
-		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5_2.obj").getFile());	// "blatt5/UB5_T1.obj"
+		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5_monotonY.obj").getFile());	// "blatt5_2.obj" "blatt5_monotonY.obj"
 
 		ArtGallery ag = null;
 		try {

@@ -76,51 +76,51 @@ public class Polygon {
 
 	public ArrayList<Polygon> splitMonoton() {
 		ArrayList<Polygon> result = new ArrayList<Polygon>();
-//		result.add(this);
+		result.add(this);
 
-		for (Line line : splitLines) {
-//			System.out.println(line.p1);
-			
-			Point p1Pre = line.p1.predecessor;
-			Point p1Suc = line.p1.successor;
-
-			Point p2Pre = line.p2.predecessor;
-			Point p2Suc = line.p2.successor;
-
-			Point p1A = new Point(line.p1);
-			Point p2A = new Point(line.p2);
-			
-			Point p1B = new Point(line.p1);
-			Point p2B = new Point(line.p2);
-			
-			// Side A
-			p1Pre.successor = p1A;
-			p1A.predecessor = p1Pre;
-			
-			p1A.successor = p2A;
-			p2A.predecessor = p1A;
-			
-			p2Suc.predecessor = p2A;
-			p2A.successor = p2Suc;
-			
-			// Side B
-			p1Suc.predecessor = p1B;
-			p1B.successor = p1Suc;
-			
-			p1A.predecessor = p2A;
-			p2A.successor = p1A;
-			
-			p2Pre.successor = p2B;
-			p2B.predecessor = p2Pre;
-			
-			
-			Point p = p1B;
-			while(p != p2B) {
-				System.out.println(p);
-				p = p.successor;
-			}
-			System.out.println();
-		}
+//		for (Line line : splitLines) {
+////			System.out.println(line.p1);
+//			
+//			Point p1Pre = line.p1.predecessor;
+//			Point p1Suc = line.p1.successor;
+//
+//			Point p2Pre = line.p2.predecessor;
+//			Point p2Suc = line.p2.successor;
+//
+//			Point p1A = new Point(line.p1);
+//			Point p2A = new Point(line.p2);
+//			
+//			Point p1B = new Point(line.p1);
+//			Point p2B = new Point(line.p2);
+//			
+//			// Side A
+//			p1Pre.successor = p1A;
+//			p1A.predecessor = p1Pre;
+//			
+//			p1A.successor = p2A;
+//			p2A.predecessor = p1A;
+//			
+//			p2Suc.predecessor = p2A;
+//			p2A.successor = p2Suc;
+//			
+//			// Side B
+//			p1Suc.predecessor = p1B;
+//			p1B.successor = p1Suc;
+//			
+//			p1A.predecessor = p2A;
+//			p2A.successor = p1A;
+//			
+//			p2Pre.successor = p2B;
+//			p2B.predecessor = p2Pre;
+//			
+//			
+//			Point p = p1B;
+//			while(p != p2B) {
+//				System.out.println(p);
+//				p = p.successor;
+//			}
+//			System.out.println();
+//		}
 
 		return result;
 	}

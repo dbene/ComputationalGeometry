@@ -34,15 +34,23 @@ public class ArtGallery {
 			vertex.classification = classifyVertex(vertex);
 //			System.out.println(vertex + " == " + vertex.classification.getValue());
 		}
-
-		// Split to y-Monotone polygons
-		ArrayList<Polygon> monotonePolygons = yMonotisePolygon(polygon);
-
-		// Triangulation of y-Monotone polygons
-		for (Polygon polygon : monotonePolygons) {
+		
+		// Monotonisieren
+//		yMonotisePolygon(polygon);
+//		result.add(polygon);
+		
+		// Triangulieren
+		triangulatePolygon(polygon);
+		result.add(polygon);
+		
+//		// Split to y-Monotone polygons
+//		ArrayList<Polygon> monotonePolygons = yMonotisePolygon(polygon);
+//
+//		// Triangulation of y-Monotone polygons
+//		for (Polygon polygon : monotonePolygons) {
 //			triangulatePolygon(polygon);
-			result.add(polygon);
-		}
+////			result.add(polygon);
+//		}
 	}
 
 	private CLASSIFICATION classifyVertex(Point v) {
