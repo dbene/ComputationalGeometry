@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 public class Polygon {
 	LinkedList<Point> points = new LinkedList<Point>();
 	LinkedList<Line> triangleLines = new LinkedList<Line>();
+	LinkedList<Line> splitLines = new LinkedList<Line>();
+	LinkedList<Edge> edges = new LinkedList<Edge>();
 
 	public Polygon(String obj) {
 		String[] objLines = obj.split(System.getProperty("line.separator"));
@@ -43,6 +45,38 @@ public class Polygon {
 				points.get(i).predecessor = points.get(i - 1);
 			}
 		}
+
+		for (Point point : this.points) {
+			Edge edge = new Edge(point, point.successor);
+			point.successorEdge = edge;
+			this.edges.add(edge);
+		}
+
+		for (int i = 0; i < edges.size(); i++) {
+			if (i == 0) {
+				// Nothing
+			} else if (i == edges.size() - 1) {
+				edges.get(i - 1).successor = edges.get(i);
+				edges.get(i).predecessor = edges.get(i - 1);
+
+				edges.get(0).predecessor = edges.get(i);
+				edges.get(i).successor = edges.get(0);
+			} else {
+				edges.get(i - 1).successor = edges.get(i);
+				edges.get(i).predecessor = edges.get(i - 1);
+			}
+		}
+
+		for (Point point : this.points) {
+			point.predecessorEdge = point.predecessor.successorEdge;
+		}
+	}
+	
+	public ArrayList<Polygon> splitMonoton(){
+		ArrayList<Polygon> result = new ArrayList<Polygon>();
+		result.add(this);
+		
+		return result;
 	}
 
 	public JsonObject toJsonObject() {
@@ -51,17 +85,23 @@ public class Polygon {
 		JsonArray pointArr = new JsonArray();
 		JsonArray lineArr = new JsonArray();
 		for (Point point : points) {
+			point.size = 10;
 			pointArr.add(point.toJsonObject());
-			lineArr.add(new Line(point, point.successor).toJsonObject());
+			lineArr.add(new Line(point, point.successor, 0, 0, 0, 5).toJsonObject());
+		}
+		for (Line line : splitLines) {
+			line.color = new DrawColor(0, 0, 255);
+			line.width = 4;
+			lineArr.add(line.toJsonObject());
 		}
 		json.add("points", pointArr);
-		json.add("lines", lineArr);		
+		json.add("lines", lineArr);
 
 		JsonArray triLineArr = new JsonArray();
 		for (Line line : this.triangleLines) {
 			triLineArr.add(line.toJsonObject());
 		}
-		json.add("triLines", triLineArr);	
+		json.add("triLines", triLineArr);
 
 		return json;
 	}

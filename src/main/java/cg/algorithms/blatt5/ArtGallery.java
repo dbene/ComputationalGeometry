@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ArtGallery {
 
 		// Triangulation of y-Monotone polygons
 		for (Polygon polygon : monotonePolygons) {
-			triangulatePolygon(polygon);
+//			triangulatePolygon(polygon);
 			result.add(polygon);
 		}
 	}
@@ -74,9 +75,124 @@ public class ArtGallery {
 	}
 
 	public ArrayList<Polygon> yMonotisePolygon(Polygon polygon) {
-		ArrayList<Polygon> result = new ArrayList<Polygon>();
+		LinkedList<Point> Q = new LinkedList<Point>();
+		
+		HashMap<Edge, Point> tree = new HashMap<Edge, Point>();
 
-		result.add(polygon);
+		Q.addAll(polygon.points);
+		Collections.sort(Q, new Comparator<Point>() {
+			@Override
+			public int compare(Point o1, Point o2) {
+				return (int) (o2.y - o1.y);
+			}
+		});
+		
+		while(!Q.isEmpty()){
+			Point p = Q.pop();
+			Edge ej = null;
+			Line l = null;
+			
+			switch (p.classification) {
+			case START:				
+				Edge e = p.successorEdge;
+				tree.put(e, p);
+				
+				break;
+			case END:
+				if(tree.get(p.predecessorEdge).classification == CLASSIFICATION.MERGE) {
+					l = new Line(p, tree.get(p.predecessorEdge));
+					polygon.splitLines.add(l);
+				}
+				tree.remove(p.predecessorEdge);
+				
+				break;
+			case SPLIT:
+				ej = eJ(p);
+				
+				l = new Line(p, tree.get(ej));
+				polygon.splitLines.add(l);
+				
+				tree.put(ej, p);
+				tree.put(p.successorEdge, p);
+				
+				break;
+			case MERGE:
+				if (tree.get(p.predecessorEdge).classification == CLASSIFICATION.MERGE) {
+					l = new Line(p, tree.get(p.predecessorEdge));
+					polygon.splitLines.add(l);
+				}
+				tree.remove(p.predecessorEdge);
+				ej = eJ(p);
+
+				if (tree.get(ej).classification == CLASSIFICATION.MERGE) {
+					l = new Line(p, tree.get(ej));
+					polygon.splitLines.add(l);
+				}
+				
+				tree.put(ej, p);
+
+				break;
+			case REGULAR:
+				if (interiorIsRight(p)) {
+					if (tree.get(p.predecessorEdge).classification == CLASSIFICATION.MERGE) {
+						l = new Line(p, tree.get(p.predecessorEdge));
+						polygon.splitLines.add(l);
+					}
+					tree.remove(p.predecessorEdge);
+					tree.put(p.successorEdge, p);
+				} else {
+					ej = eJ(p);
+					if (tree.get(ej).classification == CLASSIFICATION.MERGE) {
+						l = new Line(p, tree.get(ej));
+						polygon.splitLines.add(l);
+					}
+					tree.put(ej, p);
+				}
+
+				break;
+
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + p.classification);
+			}
+
+			for (Edge e : tree.keySet()) {
+				System.out.print(e + " | " + tree.get(e)+",\t");
+			}
+			System.out.println();
+		}
+		
+		return polygon.splitMonoton();
+	}
+	
+	private boolean interiorIsRight(Point point) {
+		return true;
+	}
+
+	private Edge eJ(Point v) {
+		Line testLine = new Line(v, new Point(0, v.y));
+
+		ArrayList<Tuple<Point, Edge>> edges = new ArrayList<Tuple<Point, Edge>>();
+		for (Edge edge : polygon.edges) {
+			Point intersection = intersect(testLine, new Line(edge.p1, edge.p2));
+			if (intersection != null) {
+				edges.add(new Tuple<Point, Edge>(intersection, edge));
+			}
+		}
+
+		double minDistance = Double.MAX_VALUE;
+		Edge result = null;
+		for (Tuple<Point, Edge> tuple : edges) {
+//			double a = tuple.x.x - v.x;
+//			double b = tuple.x.y - v.y;
+//			
+//			double test = Math.sqrt(Math.pow(a, 1)+ Math.pow(b, 2));
+			double test = v.x - tuple.x.x;
+			
+			if(minDistance > test) {
+				minDistance = test;
+				result = tuple.y;
+			}
+		}
 
 		return result;
 	}
