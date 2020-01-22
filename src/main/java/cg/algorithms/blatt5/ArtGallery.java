@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import cg.algorithms.blatt5.Point.CLASSIFICATION;
@@ -19,6 +20,7 @@ import cg.algorithms.blatt5.Point.CLASSIFICATION;
 public class ArtGallery {
 	Polygon polygon;
 	boolean CCW;
+	ArrayList<Polygon> result = new ArrayList<Polygon>();
 
 	public ArtGallery(String obj, boolean CCW) {
 		this.CCW = CCW;
@@ -38,6 +40,7 @@ public class ArtGallery {
 		// Triangulation of y-Monotone polygons
 		for (Polygon polygon : monotonePolygons) {
 			triangulatePolygon(polygon);
+			result.add(polygon);
 		}
 	}
 
@@ -108,43 +111,34 @@ public class ArtGallery {
 		S.push(Q.get(0));
 		S.push(Q.get(1));
 		for (int j = 2; j < Q.size(); j++) {
-			System.out.print(Q.get(j) + "\t\t");
-			printStack(S);
+//			System.out.print(Q.get(j) + "\t\t");
+//			printStack(S);
 
 			if (Q.get(j).left != S.peek().left) {
-//				System.out.println(Q.get(j) + " != " + S.peek());
-
 				while (!S.isEmpty()) {
 					Point p = S.pop();
 
 					if (!S.isEmpty()) {
 						Line l = new Line(Q.get(j), p);
-						polygon.triangleLines.add(l);
+						if (insidePolygon(polygon, l))
+							polygon.triangleLines.add(l);
 					}
 				}
 
 				S.push(Q.get(j - 1));
 				S.push(Q.get(j));
 			} else {
-//				System.out.println(Q.get(j) + " == " + S.peek());
-				Point p1 = S.pop();
-				Point p2 = S.pop();
+				Line testLine = new Line(S.get(1), Q.get(j));
+				while (insidePolygon(polygon, testLine)) {
+					S.pop();
+					polygon.triangleLines.add(testLine);
 
-				Line l2 = new Line(p2, Q.get(j));
-				if (insidePolygon(polygon, l2)) {
-					polygon.triangleLines.add(l2);
-				} else {
-//					S.push(p2);
+					if (S.size() > 1)
+						testLine = new Line(S.get(1), Q.get(j));
+					else
+						break;
 				}
 
-				Line l1 = new Line(p1, Q.get(j));
-				if (insidePolygon(polygon, l1)) {
-					polygon.triangleLines.add(l1);
-				} else {
-//					S.push(p1);
-				}
-
-				S.push(p2);
 				S.push(Q.get(j));
 			}
 		}
@@ -207,10 +201,9 @@ public class ArtGallery {
 		if (0 <= tA && tA <= 1 && 0 <= tB && tB <= 1) {
 			double pX = x1 + tA * (x2 - x1);
 			double pY = y1 + tA * (y2 - y1);
-			
+
 			Point result = new Point(pX, pY);
-			if (result.equals(line1.p1) || result.equals(line1.p2) || result.equals(line2.p1)
-					|| result.equals(line2.p2)) {
+			if (result.equals(line1.p1) || result.equals(line1.p2) || result.equals(line2.p1) || result.equals(line2.p2)) {
 				if (insideHelper(line2)) {
 					return null;
 				}
@@ -249,8 +242,12 @@ public class ArtGallery {
 
 	public void saveToJSON(File file) {
 		JsonObject json = new JsonObject();
-
-		json.add("polygon", this.polygon.toJsonObject());
+		
+		JsonArray polyArr = new JsonArray();
+		for (Polygon polygon : this.result) {
+			polyArr.add(polygon.toJsonObject());
+		}
+		json.add("polygone", polyArr);
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String prettyJson = gson.toJson(json);
