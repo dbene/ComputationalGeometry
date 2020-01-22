@@ -155,10 +155,10 @@ public class ArtGallery {
 				throw new IllegalArgumentException("Unexpected value: " + p.classification);
 			}
 
-			for (Edge e : tree.keySet()) {
-				System.out.print(e + " | " + tree.get(e)+",\t");
-			}
-			System.out.println();
+//			for (Edge e : tree.keySet()) {
+//				System.out.print(e + " | " + tree.get(e)+",\t");
+//			}
+//			System.out.println();
 		}
 		
 		return polygon.splitMonoton();
