@@ -28,34 +28,28 @@ public class ArtGallery {
 		this.polygon = new Polygon(obj);
 	}
 
-	public void process() {
-		// Classification
-		for (Point vertex : polygon.points) {
-			vertex.classification = classifyVertex(vertex);
-//			System.out.println(vertex + " == " + vertex.classification.getValue());
+	public void process() {		
+		// Monotonisieren
+		yMonotisePolygon(polygon);
+		result.addAll(Polygon.splitOne(polygon, polygon.splitLines));
+		
+		// Zwischenstand
+		for (Polygon polygon : result) {
+			for (Point point : polygon.points) {
+				System.out.println(point);
+			}
+			System.out.println();
 		}
 		
-		// Monotonisieren
-//		yMonotisePolygon(polygon);
-//		result.add(polygon);
-		
 		// Triangulieren
-		triangulatePolygon(polygon);
-		result.add(polygon);
-		
-//		// Split to y-Monotone polygons
-//		ArrayList<Polygon> monotonePolygons = yMonotisePolygon(polygon);
-//
-//		// Triangulation of y-Monotone polygons
-//		for (Polygon polygon : monotonePolygons) {
-//			triangulatePolygon(polygon);
-////			result.add(polygon);
-//		}
+		for (Polygon polygon : result) {
+			triangulatePolygon(polygon);
+		}
 	}
 
-	private CLASSIFICATION classifyVertex(Point v) {
+	public static CLASSIFICATION classifyVertex(Point v, boolean ccw) {
 		Point u, w;
-		if (this.CCW) {
+		if (ccw) {
 			u = v.successor;
 			w = v.predecessor;
 		} else {
@@ -78,11 +72,11 @@ public class ArtGallery {
 		return CLASSIFICATION.REGULAR;
 	}
 
-	public boolean isLeft(Point a, Point b, Point c) {
+	public static boolean isLeft(Point a, Point b, Point c) {
 		return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) > 0;
 	}
 
-	public ArrayList<Polygon> yMonotisePolygon(Polygon polygon) {
+	public void yMonotisePolygon(Polygon polygon) {
 		LinkedList<Point> Q = new LinkedList<Point>();
 		
 		HashMap<Edge, Point> tree = new HashMap<Edge, Point>();
@@ -168,8 +162,6 @@ public class ArtGallery {
 //			}
 //			System.out.println();
 		}
-		
-		return polygon.splitMonoton();
 	}
 	
 	private boolean interiorIsRight(Point point) {
