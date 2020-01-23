@@ -5,6 +5,8 @@ import java.util.Comparator;
 
 import com.google.gson.JsonObject;
 
+import cg.algorithms.blatt5.Point.CLASSIFICATION;
+
 public class Point {
 	public double x, y;
 	public DrawColor color;
@@ -14,10 +16,10 @@ public class Point {
 	public Polygon polygon;
 	public Point successor;
 	public Point predecessor;
-	
+
 	public Edge successorEdge;
 	public Edge predecessorEdge;
-	
+
 	public boolean left;
 
 	public CLASSIFICATION classification;
@@ -81,7 +83,7 @@ public class Point {
 			this.color = new DrawColor(255, 0, 0);
 		json.add("color", this.color.toJsonObject());
 
-		json.addProperty("text", this.classification.getValue());
+//		json.addProperty("text", this.left);
 
 		return json;
 	}
@@ -98,6 +100,35 @@ public class Point {
 
 		Point p = (Point) o;
 		return this.x == p.x && this.y == p.y;
+	}
+
+	public static boolean isLeft(Point a, Point b, Point c) {
+		return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) > 0;
+	}
+
+	public static CLASSIFICATION classifyVertex(Point v, boolean ccw) {
+		Point u, w;
+		if (ccw) {
+			u = v.successor;
+			w = v.predecessor;
+		} else {
+			w = v.successor;
+			u = v.predecessor;
+		}
+
+		if (u.y < v.y && w.y < v.y && Point.isLeft(u, v, w))
+			return CLASSIFICATION.START;
+
+		if (u.y < v.y && w.y < v.y && !Point.isLeft(u, v, w))
+			return CLASSIFICATION.SPLIT;
+
+		if (u.y > v.y && w.y > v.y && Point.isLeft(u, v, w))
+			return CLASSIFICATION.END;
+
+		if (u.y > v.y && w.y > v.y && !Point.isLeft(u, v, w))
+			return CLASSIFICATION.MERGE;
+
+		return CLASSIFICATION.REGULAR;
 	}
 
 	public enum CLASSIFICATION {
