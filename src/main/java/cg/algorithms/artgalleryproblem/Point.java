@@ -1,11 +1,11 @@
-package cg.algorithms.blatt5;
+package cg.algorithms.artgalleryproblem;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.google.gson.JsonObject;
 
-import cg.algorithms.blatt5.Point.CLASSIFICATION;
+import cg.algorithms.artgalleryproblem.Point.CLASSIFICATION;
 
 public class Point {
 	public double x, y;

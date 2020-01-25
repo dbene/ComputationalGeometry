@@ -1,4 +1,4 @@
-package cg.algorithms.blatt4;
+package cg.algorithms.rangesearch;
 
 import java.util.ArrayList;
 

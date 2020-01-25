@@ -1,4 +1,4 @@
-package cg.algorithms.blatt4;
+package cg.algorithms.rangesearch;
 
 public enum DIMENSION {
 	Y("y"), X("x");

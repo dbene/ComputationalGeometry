@@ -1,4 +1,4 @@
-package cg.algorithms.blatt5;
+package cg.algorithms.artgalleryproblem;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import cg.algorithms.blatt5.Point.CLASSIFICATION;
+import cg.algorithms.artgalleryproblem.Point.CLASSIFICATION;
 
 public class ArtGallery {
 	Polygon polygon;

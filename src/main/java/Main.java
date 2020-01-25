@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 
-import cg.algorithms.blatt4.D2Tree;
-import cg.algorithms.blatt5.ArtGallery;
+import cg.algorithms.utils.SceneProgress;
 import cg.algorithms.grahamsscan.GrahamsScan;
 import cg.algorithms.grahamsscan.Point;
 import cg.algorithms.polygonsintersect.IntersectConvexPolygon;
 import cg.algorithms.polygonsintersect.Polygon;
 import cg.algorithms.quadtrees.QuadTree;
-import cg.algorithms.utils.SceneProgress;
+import cg.algorithms.rangesearch.D2Tree;
+import cg.algorithms.artgalleryproblem.ArtGallery;
 
 public class Main {
 

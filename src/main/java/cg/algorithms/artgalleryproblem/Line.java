@@ -1,4 +1,4 @@
-package cg.algorithms.blatt5;
+package cg.algorithms.artgalleryproblem;
 
 import com.google.gson.JsonObject;
 
