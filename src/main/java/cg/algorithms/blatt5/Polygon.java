@@ -19,7 +19,7 @@ public class Polygon {
 	LinkedList<Line> splitLines = new LinkedList<Line>();
 	LinkedList<Edge> edges = new LinkedList<Edge>();
 
-	public Polygon(String obj) {
+	public Polygon(String obj, boolean ccw) {
 		String[] objLines = obj.split(System.getProperty("line.separator"));
 
 		ArrayList<Point> cache = new ArrayList<Point>();
@@ -52,6 +52,8 @@ public class Polygon {
 	}
 
 	private void buildPolygon() {
+		ArrayList<Point> summits = new ArrayList<Point>();
+		
 		for (int i = 0; i < points.size(); i++) {
 			if (i == 0) {
 				// Nothing
@@ -69,6 +71,9 @@ public class Polygon {
 
 		for (Point point : this.points) {
 			point.classification = Point.classifyVertex(point, this.CCW);
+			if (point.classification == CLASSIFICATION.START || point.classification == CLASSIFICATION.SPLIT) {
+				summits.add(point);
+			}
 		}
 
 		for (Point point : this.points) {
@@ -95,29 +100,19 @@ public class Polygon {
 		for (Point point : this.points) {
 			point.predecessorEdge = point.predecessor.successorEdge;
 		}
-
-		ArrayList<Point> Q = new ArrayList<Point>();
-		Q.addAll(this.points);
-		Collections.sort(Q, new Comparator<Point>() {
-			@Override
-			public int compare(Point o1, Point o2) {
-				return (int) (o2.y - o1.y);
+		
+		for (Point point : summits) {
+			Point active = point;
+			while (active.classification != CLASSIFICATION.END && active.classification != CLASSIFICATION.MERGE) {
+				active.left = false;
+				active = active.predecessor;
 			}
-		});
 
-		Point highest = Q.get(0);
-		Point lowest = Q.get(Q.size() - 1);
-
-		Point active = highest;
-		while (active != lowest) {
-			active.left = false;
-			active = active.predecessor;
-		}
-
-		active = highest;
-		while (active != lowest) {
-			active.left = true;
-			active = active.successor;
+			active = point;
+			while (active.classification != CLASSIFICATION.END && active.classification != CLASSIFICATION.MERGE) {
+				active.left = true;
+				active = active.successor;
+			}
 		}
 	}
 
@@ -138,6 +133,8 @@ public class Polygon {
 			Point p = Q.pop();
 			Edge ej = null;
 			Line l = null;
+			
+			System.out.println(p);
 
 			switch (p.classification) {
 			case START:
@@ -324,7 +321,7 @@ public class Polygon {
 
 		ArrayList<Tuple<Point, Edge>> edges = new ArrayList<Tuple<Point, Edge>>();
 		for (Edge edge : polygon.edges) {
-			Point intersection = Line.intersect(testLine, new Line(edge.p1, edge.p2), polygon.CCW);
+			Point intersection = Line.intersect(testLine, new Line(edge.p1, edge.p2), polygon.CCW, false);
 			if (intersection != null) {
 				edges.add(new Tuple<Point, Edge>(intersection, edge));
 			}
@@ -340,6 +337,8 @@ public class Polygon {
 				result = tuple.y;
 			}
 		}
+		
+		System.out.println(v + " => " + result);
 
 		return result;
 	}
@@ -379,7 +378,7 @@ public class Polygon {
 		Point cache = this.points.getFirst();
 		do {
 			Line testLine = new Line(cache, cache.successor);
-			if (Line.intersect(testLine, line, this.CCW) != null)
+			if (Line.intersect(testLine, line, this.CCW, false) != null)
 				return false;
 
 			cache = cache.successor;

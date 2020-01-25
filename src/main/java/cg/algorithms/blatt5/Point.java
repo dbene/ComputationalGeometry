@@ -83,7 +83,7 @@ public class Point {
 			this.color = new DrawColor(255, 0, 0);
 		json.add("color", this.color.toJsonObject());
 
-//		json.addProperty("text", this.left);
+//		json.addProperty("text", this.classification.getValue() + ", " + this.left);
 
 		return json;
 	}

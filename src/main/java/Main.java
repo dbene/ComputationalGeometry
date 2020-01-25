@@ -119,12 +119,12 @@ public class Main {
 
 	public static void blatt5(Path drawerPath) {
 		// Read Object
-		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5_3.obj").getFile());	// "blatt5_2.obj" "blatt5_monotonY.obj"
+		File polygon = new File(ClassLoader.getSystemClassLoader().getResource("blatt5_4.obj").getFile());	// "blatt5_2.obj" "blatt5_monotonY.obj"
 
 		ArtGallery ag = null;
 		try {
 			String pointsString = FileUtils.readFileToString(polygon, "UTF-8");
-			ag = new ArtGallery(pointsString, false);
+			ag = new ArtGallery(pointsString, true);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

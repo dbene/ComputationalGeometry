@@ -20,16 +20,16 @@ import cg.algorithms.blatt5.Point.CLASSIFICATION;
 
 public class ArtGallery {
 	Polygon polygon;
-	boolean CCW;
 	ArrayList<Polygon> result = new ArrayList<Polygon>();
 
-	public ArtGallery(String obj, boolean CCW) {
-		this.CCW = CCW;
-		this.polygon = new Polygon(obj);
+	public ArtGallery(String obj, boolean ccw) {
+		this.polygon = new Polygon(obj, ccw);
 	}
 
-	public void process() {		
+	public void process() {
 		// Monotonisieren
+//		result.add(polygon);
+
 		polygon.generateSplitLines();
 		
 		result.addAll(Polygon.splitRecursivly(polygon, polygon.splitLines));
@@ -52,7 +52,7 @@ public class ArtGallery {
 
 	public void saveToJSON(File file) {
 		JsonObject json = new JsonObject();
-		
+
 		JsonArray polyArr = new JsonArray();
 		for (Polygon polygon : this.result) {
 			polyArr.add(polygon.toJsonObject());

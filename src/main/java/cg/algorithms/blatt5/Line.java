@@ -41,7 +41,7 @@ public class Line {
 	 * @param line2
 	 * @return Point of intersection or null if there is none
 	 */
-	public static Point intersect(Line line1, Line line2, boolean ccw) {
+	public static Point intersect(Line line1, Line line2, boolean ccw, boolean onPoint) {
 		if (line1 == null || line2 == null)
 			return null;
 		
@@ -73,7 +73,7 @@ public class Line {
 
 			Point result = new Point(pX, pY);
 			if (result.equals(line1.p1) || result.equals(line1.p2) || result.equals(line2.p1) || result.equals(line2.p2)) {
-				if (insideHelper(line2, ccw)) {
+				if (!onPoint && insideHelper(line2, ccw)) {
 					return null;
 				}
 				return result;
